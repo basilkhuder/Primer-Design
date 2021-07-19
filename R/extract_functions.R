@@ -46,10 +46,13 @@ primer_extract <- function(doc) {
 document_extract <- function(doc) {
   main_df <- genomic_extract(doc)
   primer_df <- primer_extract(doc)
-  combined_df <- dplyr::full_join(primer_df, main_df, by = "Gene")
+  combined_df <-
+    merge(primer_df, main_df, all.x = TRUE, all.y = TRUE)
+  
   return(combined_df)
   
 }
+
 
 #' Paragraph Extract
 #' Extracts only portions of the word document that are text paragraphs
