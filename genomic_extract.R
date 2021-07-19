@@ -1,7 +1,6 @@
 genomic_extract <- function(doc) {
-  main_df <- officer::docx_summary(officer::read_docx(doc))
-  main_df <- main_df[main_df["content_type"] == "paragraph", ]
-  main_df <- main_df[["text"]][1]
+  
+  main_df <- paragraph_extract(doc)
   gene_name <- stringr::str_match(main_df, "(.*)Exon")[[2]]
   position <- stringr::str_match(main_df, "Genomic Coordinates: (.*)V")[[2]]
   exon <- stringr::str_extract(main_df, "Exon \\d*")
@@ -10,5 +9,14 @@ genomic_extract <- function(doc) {
                         Exon = exon)
   main_df[["Exon"]] <- gsub("Exon ", "E", main_df[["Exon"]])
   return(main_df)
+  
+}
+
+paragraph_extract <- function(doc) {
+  doc <- officer::read_docx(doc)
+  doc <- officer::docx_summary(doc)
+  doc <- doc[doc["content_type"] == "paragraph", ]
+  doc <- doc[["text"]][1]
+  return(doc)
   
 }
