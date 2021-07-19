@@ -51,7 +51,14 @@ document_extract <- function(doc) {
   
 }
 
+#' Paragraph Extract
+#' Extracts only portions of the word document that are text paragraphs
+#' @param doc The path to the word document wanting to be extracted
+#' @return A vector made up of the lines of paragraph text from the word document
+#' @export
+#' @examples paragraph_extract("word_doc.docx")
 paragraph_extract <- function(doc) {
+  
   doc <- doc |>
     officer::read_docx() |>
     officer::docx_summary() |>
