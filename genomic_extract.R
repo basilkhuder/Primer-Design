@@ -5,7 +5,7 @@ genomic_extract <- function(doc) {
     stringr::str_match(main_df, "Genomic Coordinates: (.*)V")[[2]]
   exon <- stringr::str_extract(main_df, "Exon \\d*")
   main_df <- data.frame(Gene = gene_name,
-                        "Genomic_Position" = position,
+                        Genomic_Position = position,
                         Exon = exon)
   main_df[["Exon"]] <- gsub("Exon ", "E", main_df[["Exon"]])
   return(main_df)
