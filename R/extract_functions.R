@@ -29,9 +29,11 @@ primer_extract <- function(doc) {
     
   }
   
-  sequence <-
-    stringr::str_extract_all(string_test, "[ACTG]* [ACTG]*")[[1]]
-  sequence <- stringr::str_trim(sequence, side = "left")
+  sequence <- string_test |>
+    stringr::str_extract_all("[ACTG]* [ACTG]*") |>
+    unlist() |>
+    stringr::str_trim(side = "left")
+  
   primer_df <- data.frame(
     Gene = gene,
     For_Primer_Sequence = sequence[[1]],
