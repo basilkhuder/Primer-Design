@@ -43,7 +43,14 @@ primer_extract <- function(doc) {
   return(primer_df)
 }
 
+#' Document Extract
+#' Extract Primer Design word documents for sequence-specific information
+#' @param doc The path to the word document containing primer information
+#' @return A data-frame with the gene name, primer sequences and coordinates
+#' @export
+#' @examples document_extract("primer_doc.docx)
 document_extract <- function(doc) {
+  
   main_df <- genomic_extract(doc)
   primer_df <- primer_extract(doc)
   combined_df <-
