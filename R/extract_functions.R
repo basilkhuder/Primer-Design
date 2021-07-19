@@ -1,13 +1,13 @@
 genomic_extract <- function(doc) {
   main_df <- paragraph_extract(doc)[1]
-  gene_name <- stringr::str_match(main_df, "(.*)Exon")[[2]]
-  position <-
-    stringr::str_match(main_df, "Genomic Coordinates: (.*)V")[[2]]
-  exon <- stringr::str_extract(main_df, "Exon \\d*")
-  main_df <- data.frame(Gene = gene_name,
-                        Genomic_Position = position,
-                        Exon = exon)
-  main_df[["Exon"]] <- gsub("Exon ", "E", main_df[["Exon"]])
+  patterns <- c(gene = "(.*)Exon",
+                position = "Genomic Coordinates: (.*)V",
+                exon = "Exon \\d*") |>
+    pattern_match(main_df)
+  
+  main_df <- data.frame(Gene = patterns[["gene"]],
+                        Genomic_Position = patterns[["position"]],
+                        Exon = patterns[["exon"]])
   return(main_df)
   
 }
@@ -46,11 +46,10 @@ primer_extract <- function(doc) {
 #' Document Extract
 #' Extract Primer Design word documents for sequence-specific information
 #' @param doc The path to the word document containing primer information
-#' @return A data-frame with the gene name, primer sequences and coordinates
+#' @return A data-frame with the Gene Name, primer sequences and coordinates
 #' @export
 #' @examples document_extract("primer_doc.docx)
 document_extract <- function(doc) {
-  
   main_df <- genomic_extract(doc)
   primer_df <- primer_extract(doc)
   combined_df <-
@@ -66,12 +65,27 @@ document_extract <- function(doc) {
 #' @return A vector made up of the lines of paragraph text from the word document
 #' @examples paragraph_extract("word_doc.docx")
 paragraph_extract <- function(doc) {
-  
   doc <- doc |>
     officer::read_docx() |>
     officer::docx_summary() |>
     subset(content_type == "paragraph", select = "text") |>
     unlist() |>
     as.vector()
+  
+}
+
+pattern_match <- function(patterns, string) {
+  patterns <- patterns |>
+    sapply(\(x) stringr::str_match(string, x)) |>
+    sapply(\(x) ifelse(length(x) > 1, x[[2]], x[[1]]))
+  
+  exon_call <- try(match.arg("exon", names(patterns)),
+                   silent = TRUE)
+  
+  if (class(exon_call) == "character") {
+    patterns[[exon_call]] <- gsub("Exon ", "E", patterns[[exon_call]])
+  }
+  
+  return(patterns)
   
 }
