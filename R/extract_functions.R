@@ -17,7 +17,7 @@ primer_extract <- function(doc) {
   string_test <- stringr::str_subset(primer_df, "For_and")
   
   if (length(string_test) == 0) {
-    string_test <- str_subset(primer_df, "_and_")
+    string_test <- stringr::str_subset(primer_df, "_and_")
     gene <- stringr::str_match(string_test, "(.*)Ex.*_and_")[[2]]
     
   } else {
