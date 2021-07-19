@@ -16,7 +16,7 @@ paragraph_extract <- function(doc) {
   doc <- officer::read_docx(doc)
   doc <- officer::docx_summary(doc)
   doc <- doc[doc["content_type"] == "paragraph", ]
-  doc <- doc[["text"]][1]
+  doc <- doc[["text"]]
   return(doc)
   
 }
