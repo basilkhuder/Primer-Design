@@ -53,7 +53,6 @@ document_extract <- function(doc) {
   
 }
 
-
 #' Paragraph Extract
 #' Extracts only portions of the word document that are text paragraphs
 #' @param doc The path to the word document wanting to be extracted
