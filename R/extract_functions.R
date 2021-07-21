@@ -72,6 +72,8 @@ paragraph_extract <- function(doc) {
     unlist() |>
     as.vector()
   
+  return(doc)
+  
 }
 
 pattern_match <- function(patterns, string) {
